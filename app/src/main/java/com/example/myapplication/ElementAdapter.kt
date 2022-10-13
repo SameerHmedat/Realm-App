@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.element_items_row.view.*
 
-class ElementAdapter(private var ElementList: List<Element>) :
+class ElementAdapter(private var ElementList: ArrayList<Person>) :
     RecyclerView.Adapter<ElementAdapter.ElementViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementViewHolder {
@@ -18,7 +18,7 @@ class ElementAdapter(private var ElementList: List<Element>) :
     }
 
     override fun onBindViewHolder(holder: ElementViewHolder, position: Int) {
-        val currentItem: Element = ElementList[position]
+        val currentItem: Person = ElementList[position]
         holder.bind(currentItem)
 
     }
@@ -30,10 +30,10 @@ class ElementAdapter(private var ElementList: List<Element>) :
     class ElementViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
 
-        fun bind(element: Element) {
-            itemView.txt_element_Id.text = element.id.toString()
-            itemView.txt_element_name.text = element.name
-            itemView.txt_element_email.text = element.email
+        fun bind(person: Person) {
+            itemView.txt_element_Id.text = person.id.toString()
+            itemView.txt_element_name.text = person.name
+            itemView.txt_element_email.text = person.email
         }
 
 

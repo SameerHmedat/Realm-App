@@ -1,17 +1,18 @@
 package com.example.myapplication
 
 import android.util.Log
+import androidx.lifecycle.Lifecycle
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.Sort
 import io.realm.kotlin.executeTransactionAwait
 import kotlinx.coroutines.Dispatchers
 
-open class Operations(private val config: RealmConfiguration) {
+open class Operations() {
 
     suspend fun insertData(name: String, email: String) {
 
-        val realm = Realm.getInstance(config)
+        val realm = Realm.getDefaultInstance()
 
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
             val nextId: Int
@@ -29,20 +30,20 @@ open class Operations(private val config: RealmConfiguration) {
             val person = PersonRealm(id = nextId, name = name, email = email)
             realmTransaction.insertOrUpdate(person)
         }
-
+        realm.close()
         //realmTransaction.where(PersonRealm::class.java).findAll()
     }
 
 
     fun retrieveData(): ArrayList<Person> {
 
-        val realm = Realm.getInstance(config)
+        val realm = Realm.getDefaultInstance()
         val people = ArrayList<Person>()
 
         people.addAll(realm
             .where(PersonRealm::class.java)
 //            .sort("name", Sort.ASCENDING)
-            .sort("id", Sort.ASCENDING)
+            .sort("id", Sort.DESCENDING)
             .findAll()
             //return Realm Result object
             .map { person ->
@@ -53,13 +54,14 @@ open class Operations(private val config: RealmConfiguration) {
                 )
             }
         )
+        realm.close()
 
         return people
     }
 
     suspend fun removeData(personId: Int) {
 
-        val realm = Realm.getInstance(config)
+        val realm = Realm.getDefaultInstance()
 
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
             val dataToRemove = realmTransaction
@@ -69,11 +71,12 @@ open class Operations(private val config: RealmConfiguration) {
 
             dataToRemove?.deleteFromRealm()
         }
+        realm.close()
     }
 
     suspend fun updateData(personId: Int, name: String, email: String) {
 
-        val realm = Realm.getInstance(config)
+        val realm = Realm.getDefaultInstance()
         realm.executeTransactionAwait(Dispatchers.IO) { realmTransaction ->
             val dataToUpdate = realmTransaction
                 .where(PersonRealm::class.java)
@@ -89,6 +92,7 @@ open class Operations(private val config: RealmConfiguration) {
                 }
             }
         }
+        realm.close()
     }
 }
 

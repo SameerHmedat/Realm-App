@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,6 +14,7 @@ import kotlinx.android.synthetic.main.data_input.*
 import kotlinx.coroutines.*
 import java.util.function.LongFunction
 
+
 class MainActivity : AppCompatActivity() {
 
 
@@ -20,22 +22,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Realm.init(this)
 
-        val realmName = "Sameer_project"
-        val configuration = RealmConfiguration.Builder()
-            .schemaVersion(4)
-            .deleteRealmIfMigrationNeeded()
-            .allowWritesOnUiThread(false)
-            .allowQueriesOnUiThread(false)
-            .name(realmName)
-            .build()
-
-        //  realm = Realm.getInstance(configuration) //to deal with database
-
-        val databaseOperations = Operations(configuration)
-
-
+        val databaseOperations = Operations()
 
         btn_insertdata.setOnClickListener {
             val name = edt_name.text.toString()
@@ -130,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                             .show()
                     } else {
                         val intent = Intent(this@MainActivity, SecondActivity::class.java)
-                        intent.putParcelableArrayListExtra("items", items)
+//                        intent.putParcelableArrayListExtra("items", items)
                         startActivity(intent)
                     }
                 }
