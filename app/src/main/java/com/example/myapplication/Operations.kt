@@ -42,7 +42,7 @@ open class Operations() {
         people.addAll(realm
             .where(PersonRealm::class.java)
 //            .sort("name", Sort.ASCENDING)
-            .sort("id", Sort.DESCENDING)
+            .sort("id", Sort.ASCENDING)
             .findAll()
             //return Realm Result object
             .map { person ->
@@ -100,7 +100,7 @@ open class Operations() {
 
         return realm
             .where(PersonRealm::class.java)
-            .sort("id", Sort.DESCENDING)
+            .sort("id", Sort.ASCENDING)
             .findAll()
     }
 }

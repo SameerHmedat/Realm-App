@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(
                             this@MainActivity,
-                            "The Last item in DB",
+                            "The First item in DB",
                             Toast.LENGTH_SHORT
                         )
                             .show()
