@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import kotlinx.android.synthetic.main.element_items_row.view.*
 
 internal class RealmAdapter(data: OrderedRealmCollection<PersonRealm?>?) :
     RealmRecyclerViewAdapter<PersonRealm?, RealmAdapter.RealmViewHolder?>(data, true) {
+
+    val TAG="MainActivity"
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -24,6 +27,7 @@ internal class RealmAdapter(data: OrderedRealmCollection<PersonRealm?>?) :
 
     override fun onBindViewHolder(holder: RealmViewHolder, position: Int) {
         val obj = getItem(position)
+        Log.i(TAG, "Binding view holder: ${obj!!.name}")
         holder.bind(obj)
 
     }
@@ -39,6 +43,11 @@ internal class RealmAdapter(data: OrderedRealmCollection<PersonRealm?>?) :
             itemView.txt_element_name.text = person?.name
             itemView.txt_element_email.text = person?.email
         }
+
+    }
+    init {
+        Log.i(TAG,
+            "Created RealmRecyclerViewAdapter for ${getData()!!.size} items.")
     }
 
 }

@@ -1,57 +1,69 @@
 package com.example.myapplication
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.Sort
 import kotlinx.android.synthetic.main.activity_second.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
 class SecondActivity : AppCompatActivity() {
+    private val databaseOperations = Operations()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
 
-        setUpUIList()
-        setElementList()
+        setAdapter()
 
-    }
+        btn_save.setOnClickListener {
 
-    private fun setElementList() {
-        val databaseOperations = Operations()
+            val id = edt_id_save.text.toString()
+            val name = edt_name_save.text.toString()
+            val email = edt_email_save.text.toString()
 
-        val elementList: ArrayList<Person> = arrayListOf()
-        val elementAdapter = ElementAdapter(elementList)
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            val items = databaseOperations.retrieveData()
-            withContext(Dispatchers.Main) {
-                if (items.lastIndex == -1) {
-                    Toast.makeText(this@SecondActivity, "The DB is empty", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    for (i in items.indices) {
-                        elementList.add(Person(items[i].id, items[i].name, items[i].email))
-                    }
-                    rvElement.adapter = elementAdapter
+            if (id == "") {
+                Toast.makeText(
+                    this@SecondActivity,
+                    "Please enter id that you want to update ",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    databaseOperations.updateData(id.toInt(), name, email)
                 }
+                Toast.makeText(
+                    this@SecondActivity,
+                    "The item has been Updated ",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
-
-//        val items: ArrayList<Person> = intent.getParcelableArrayListExtra("items")!!
-
     }
 
-    private fun setUpUIList() {
+    private fun setAdapter() {
+
         rvElement.layoutManager = LinearLayoutManager(this)
         rvElement.setHasFixedSize(true)
-    }
 
+        //        val items: ArrayList<Person> = intent.getParcelableArrayListExtra("items")!!
+//        for (i in items.indices) {
+//            elementList.add(Person(items[i].id, items[i].name, items[i].email))
+//        }
+
+        // if allowQueriesOnUiThread is true
+        //val realm = Realm.getDefaultInstance()
+        //val realmAdapter = RealmAdapter(realm.where(PersonRealm::class.java).findAll())
+        //rvElement.adapter = realmAdapter
+
+            val retriever = databaseOperations.retrieveDataRealmObject()
+                val realmAdapter = RealmAdapter(retriever)
+                rvElement.adapter = realmAdapter
+            }
 }
+
+

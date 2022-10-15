@@ -15,10 +15,10 @@ class General : Application() {
 
 
         val configuration = RealmConfiguration.Builder()
-            .schemaVersion(9)
+            .schemaVersion(14)
             .deleteRealmIfMigrationNeeded()
             .allowWritesOnUiThread(false)
-            .allowQueriesOnUiThread(false)
+            .allowQueriesOnUiThread(true)
             .name(realmName)
             .build()
 

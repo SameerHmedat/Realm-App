@@ -1,18 +1,13 @@
 package com.example.myapplication
 
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.data_input.*
 import kotlinx.coroutines.*
-import java.util.function.LongFunction
 
 
 class MainActivity : AppCompatActivity() {
@@ -39,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         }
         btn_readData.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                val items = databaseOperations.retrieveData()
+                val items = databaseOperations.retrieveDataPersonObject()
                 withContext(Dispatchers.Main) {
                     if (items.lastIndex == -1) {
                         Toast.makeText(
@@ -110,9 +105,9 @@ class MainActivity : AppCompatActivity() {
         btn_go_to_data.setOnClickListener {
             txt1.text = ""
 
-            lifecycleScope.launch(Dispatchers.IO) {
-                val items = databaseOperations.retrieveData()
-                withContext(Dispatchers.Main) {
+            //lifecycleScope.launch(Dispatchers.IO) {
+                val items = databaseOperations.retrieveDataPersonObject()
+              //  withContext(Dispatchers.Main) {
                     if (items.lastIndex == -1) {
                         Toast.makeText(this@MainActivity, "The DB is empty", Toast.LENGTH_SHORT)
                             .show()
@@ -120,8 +115,8 @@ class MainActivity : AppCompatActivity() {
                         val intent = Intent(this@MainActivity, SecondActivity::class.java)
 //                        intent.putParcelableArrayListExtra("items", items)
                         startActivity(intent)
-                    }
-                }
+                 //   }
+                // }
             }
         }
     }

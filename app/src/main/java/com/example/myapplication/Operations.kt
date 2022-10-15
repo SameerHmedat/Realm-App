@@ -1,9 +1,8 @@
 package com.example.myapplication
 
 import android.util.Log
-import androidx.lifecycle.Lifecycle
 import io.realm.Realm
-import io.realm.RealmConfiguration
+import io.realm.RealmResults
 import io.realm.Sort
 import io.realm.kotlin.executeTransactionAwait
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +34,7 @@ open class Operations() {
     }
 
 
-    fun retrieveData(): ArrayList<Person> {
+    fun retrieveDataPersonObject(): ArrayList<Person> {
 
         val realm = Realm.getDefaultInstance()
         val people = ArrayList<Person>()
@@ -93,6 +92,16 @@ open class Operations() {
             }
         }
         realm.close()
+    }
+
+     fun retrieveDataRealmObject(): RealmResults<PersonRealm>? {
+
+        val realm = Realm.getDefaultInstance()
+
+        return realm
+            .where(PersonRealm::class.java)
+            .sort("id", Sort.DESCENDING)
+            .findAll()
     }
 }
 
